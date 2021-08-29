@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State var textOnScreen = ""
+    @State var newEquation:Bool = false
+    @State var newDecimal:Bool = false
     
     
     var body: some View {
@@ -38,11 +40,15 @@ struct ContentView: View {
                         CalculatorButton(text: "clear")
                         {
                             textOnScreen = ""
+                            newDecimal = false
+                            newEquation = false
                         }.frame(width: proxy.size.width*0.75)
                         
                         CalculatorButton(text: "/")
                         {
                             scrubber(operand:"/")
+                            newEquation = false
+                            newDecimal = false
                         }
                 
                     
@@ -56,31 +62,25 @@ struct ContentView: View {
             {
                 CalculatorButton(text: "7")
                 {
-                    textOnScreen.append("7")
+                    buttonChecker(appendee: "7")
                 }
                 
                 CalculatorButton(text: "8")
                 {
-                    textOnScreen.append("8")
+                    buttonChecker(appendee: "8")
                 }
                 
                 CalculatorButton(text: "9")
                 {
-                    textOnScreen.append("9")
+                    buttonChecker(appendee: "9")
                 }
                 
                 CalculatorButton(text: "*")
                 {
                     scrubber(operand:"*")
+                    newEquation = false
+                    newDecimal = false
                 }
-            
-            
-            
-            
-            
-            
-            
-            
             
             
             }
@@ -88,44 +88,48 @@ struct ContentView: View {
             {
                 CalculatorButton(text: "4")
                 {
-                    textOnScreen.append("4")
+                    buttonChecker(appendee: "4")
                 }
                 
                 CalculatorButton(text: "5")
                 {
-                    textOnScreen.append("5")
+                    buttonChecker(appendee: "5")
                 }
                 
                 CalculatorButton(text: "6")
                 {
-                    textOnScreen.append("6")
+                    buttonChecker(appendee: "6")
                 }
                 
                 CalculatorButton(text: "-")
                 {
                     scrubber(operand:"-")
+                    newEquation = false
+                    newDecimal = false
                 }
             }
             HStack(spacing: 0)
             {
                 CalculatorButton(text: "1")
                 {
-                    textOnScreen.append("1")
+                    buttonChecker(appendee: "1")
                 }
                 
                 CalculatorButton(text: "2")
                 {
-                    textOnScreen.append("2")
+                    buttonChecker(appendee: "2")
                 }
                 
                 CalculatorButton(text: "3")
                 {
-                    textOnScreen.append("3")
+                    buttonChecker(appendee: "3")
                 }
                 
                 CalculatorButton(text: "+")
                 {
                     scrubber(operand:"+")
+                    newEquation = false
+                    newDecimal = false
                 }
             }
             HStack(spacing: 0)
@@ -139,7 +143,21 @@ struct ContentView: View {
                         CalculatorButton(text: "0")
                         {
                             textOnScreen.append("0")
-                        }.frame(width: proxy.size.width*0.75)
+                        }.frame(width: proxy.size.width*0.5)
+                        
+                        CalculatorButton(text: ".")
+                        {
+                            if newDecimal == false
+                            {
+                            scrubber(operand:".")
+                            }
+                            else
+                            {
+                                return
+                            }
+                            
+                            newEquation = false
+                        }
                         
                         CalculatorButton(text: "=")
                         {
@@ -148,17 +166,20 @@ struct ContentView: View {
                             {
                                 return
                             }
+                            if textOnScreen.last?.isNumber == false
+                            {
+                                return
+                            }
                             
                             equals.parser()
                             equals.calculate()
+                            newEquation = true
+                            newDecimal = true
+                            
                         }
-                
-                    
                     
                     }
                 }
-            
-            
             
             }
             
@@ -188,6 +209,24 @@ struct ContentView: View {
             }
             
         }
+        
+    }
+    
+    
+    func buttonChecker(appendee:String)
+    {
+        if newEquation == false
+        {
+            textOnScreen.append(appendee)
+        }
+        else
+        {
+            textOnScreen = ""
+            newEquation = false
+            textOnScreen.append(appendee)
+        }
+        
+        
         
     }
 }

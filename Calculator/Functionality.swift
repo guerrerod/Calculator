@@ -73,7 +73,7 @@ class CalculateMath {
     
             for char in text
         {
-                if char.isNumber == true
+                if char.isNumber == true || char == "."
                 {
                     tempString += String(char)
                 }
