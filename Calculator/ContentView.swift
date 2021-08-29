@@ -12,6 +12,8 @@ struct ContentView: View {
     @State var newEquation:Bool = false
     @State var newDecimal:Bool = false
     
+    @State var zeroPress:Bool = false
+    @State var allowZeros:Bool = false
     
     var body: some View {
         
@@ -42,6 +44,7 @@ struct ContentView: View {
                             textOnScreen = ""
                             newDecimal = false
                             newEquation = false
+                            zeroPress = false
                         }.frame(width: proxy.size.width*0.75)
                         
                         CalculatorButton(text: "/")
@@ -50,9 +53,6 @@ struct ContentView: View {
                             newEquation = false
                             newDecimal = false
                         }
-                
-                    
-                    
                     }
                 }
       
@@ -142,7 +142,8 @@ struct ContentView: View {
                         
                         CalculatorButton(text: "0")
                         {
-                            textOnScreen.append("0")
+                            zeroPress = true
+                            zeroChecker(input: "0")
                         }.frame(width: proxy.size.width*0.5)
                         
                         CalculatorButton(text: ".")
@@ -175,6 +176,7 @@ struct ContentView: View {
                             equals.calculate()
                             newEquation = true
                             newDecimal = true
+                            allowZeros = false
                             
                         }
                     
@@ -205,11 +207,11 @@ struct ContentView: View {
             }
             else
             {
-                
+                return
             }
-            
         }
-        
+       
+        allowZeros = true
     }
     
     
@@ -229,6 +231,19 @@ struct ContentView: View {
         
         
     }
+    
+    func zeroChecker(input:String)
+    {
+        if (zeroPress == true && allowZeros == true) || (textOnScreen == "" && zeroPress == true)
+        {
+            textOnScreen.append(input)
+        }
+        else
+        {
+            return
+        }
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
