@@ -21,7 +21,7 @@ struct ContentView: View {
                 ZStack
                 {
                     Rectangle().foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    Text(textOnScreen)
+                    Text(textOnScreen).font(.system(size: 40))
                 }
             }
             
@@ -42,7 +42,7 @@ struct ContentView: View {
                         
                         CalculatorButton(text: "/")
                         {
-                            textOnScreen.append("/")
+                            scrubber(operand:"/")
                         }
                 
                     
@@ -64,14 +64,14 @@ struct ContentView: View {
                     textOnScreen.append("8")
                 }
                 
-                CalculatorButton(text: "8")
+                CalculatorButton(text: "9")
                 {
-                    textOnScreen.append("8")
+                    textOnScreen.append("9")
                 }
                 
-                CalculatorButton(text: "X")
+                CalculatorButton(text: "*")
                 {
-                    textOnScreen.append("X")
+                    scrubber(operand:"*")
                 }
             
             
@@ -103,7 +103,7 @@ struct ContentView: View {
                 
                 CalculatorButton(text: "-")
                 {
-                    textOnScreen.append("-")
+                    scrubber(operand:"-")
                 }
             }
             HStack(spacing: 0)
@@ -125,7 +125,7 @@ struct ContentView: View {
                 
                 CalculatorButton(text: "+")
                 {
-                    textOnScreen.append("+")
+                    scrubber(operand:"+")
                 }
             }
             HStack(spacing: 0)
@@ -143,7 +143,14 @@ struct ContentView: View {
                         
                         CalculatorButton(text: "=")
                         {
+                            let equals = CalculateMath(text: textOnScreen, finalAnswer: $textOnScreen)
+                            if textOnScreen == ""
+                            {
+                                return
+                            }
                             
+                            equals.parser()
+                            equals.calculate()
                         }
                 
                     
@@ -156,14 +163,31 @@ struct ContentView: View {
             }
             
             
-            
-            
-            
-            
-            
-            
         }.ignoresSafeArea()
         
+        
+    }
+    
+    func scrubber(operand:String)
+    {
+        if textOnScreen.last?.isNumber == true
+        {
+        textOnScreen.append(operand)
+        }
+        
+        else
+        {
+            if textOnScreen != ""
+            {
+                textOnScreen.removeLast()
+                textOnScreen.append(operand)
+            }
+            else
+            {
+                
+            }
+            
+        }
         
     }
 }
